@@ -1,0 +1,195 @@
+
+import React, { useState } from 'react';
+import { FiHome, FiShoppingBag, FiUser, FiShoppingCart } from 'react-icons/fi';
+import HomeScreen from './HomeScreen';
+import OrdersScreen from './OrdersScreen';
+import ProfileScreen from './ProfileScreen';
+import CartScreen from './CartScreen';
+import ProductScreen from './ProductScreen';
+import CategoryScreen from './CategoryScreen';
+
+interface MainAppProps {
+  onLogout: () => void;
+}
+
+export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category';
+
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  moq: number;
+  image: string;
+  category: string;
+}
+
+const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
+  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+
+  const addToCart = (product: any, quantity: number) => {
+    const existingItem = cartItems.find(item => item.id === product.id);
+    
+    if (existingItem) {
+      setCartItems(cartItems.map(item =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      ));
+    } else {
+      setCartItems([...cartItems, {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: quantity,
+        moq: product.moq,
+        image: product.image,
+        category: product.category
+      }]);
+    }
+  };
+
+  const removeFromCart = (productId: string) => {
+    setCartItems(cartItems.filter(item => item.id !== productId));
+  };
+
+  const updateCartQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    
+    setCartItems(cartItems.map(item =>
+      item.id === productId
+        ? { ...item, quantity }
+        : item
+    ));
+  };
+
+  const navigateToProduct = (product: any) => {
+    setSelectedProduct(product);
+    setCurrentScreen('product');
+  };
+
+  const navigateToCategory = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentScreen('category');
+  };
+
+  const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case 'home':
+        return (
+          <HomeScreen
+            onNavigateToProduct={navigateToProduct}
+            onNavigateToCategory={navigateToCategory}
+          />
+        );
+      case 'orders':
+        return <OrdersScreen />;
+      case 'profile':
+        return <ProfileScreen onLogout={onLogout} />;
+      case 'cart':
+        return (
+          <CartScreen
+            items={cartItems}
+            onUpdateQuantity={updateCartQuantity}
+            onRemoveItem={removeFromCart}
+            onBack={() => setCurrentScreen('home')}
+          />
+        );
+      case 'product':
+        return (
+          <ProductScreen
+            product={selectedProduct}
+            onAddToCart={addToCart}
+            onBack={() => setCurrentScreen('home')}
+          />
+        );
+      case 'category':
+        return (
+          <CategoryScreen
+            category={selectedCategory}
+            onNavigateToProduct={navigateToProduct}
+            onBack={() => setCurrentScreen('home')}
+          />
+        );
+      default:
+        return <HomeScreen onNavigateToProduct={navigateToProduct} onNavigateToCategory={navigateToCategory} />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* Main Content */}
+      <div className="min-h-screen">
+        {renderScreen()}
+      </div>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-50">
+        <div className="flex justify-around items-center max-w-md mx-auto">
+          <button
+            onClick={() => setCurrentScreen('home')}
+            className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+              currentScreen === 'home'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <FiHome className="text-xl mb-1" />
+            <span className="text-xs font-medium">Home</span>
+          </button>
+
+          <button
+            onClick={() => setCurrentScreen('orders')}
+            className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+              currentScreen === 'orders'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <FiShoppingBag className="text-xl mb-1" />
+            <span className="text-xs font-medium">Orders</span>
+          </button>
+
+          <button
+            onClick={() => setCurrentScreen('cart')}
+            className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors relative ${
+              currentScreen === 'cart'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <FiShoppingCart className="text-xl mb-1" />
+            <span className="text-xs font-medium">Cart</span>
+            {totalCartItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                {totalCartItems > 9 ? '9+' : totalCartItems}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setCurrentScreen('profile')}
+            className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
+              currentScreen === 'profile'
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <FiUser className="text-xl mb-1" />
+            <span className="text-xs font-medium">Profile</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MainApp;
