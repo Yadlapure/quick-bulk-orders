@@ -11,6 +11,7 @@ interface CategoryScreenProps {
 const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToProduct, onBack }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
+  const [showFilter, setShowFilter] = useState(false);
 
   // Mock products filtered by category
   const mockCategoryProducts = [
@@ -65,6 +66,33 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       supplier: 'Urban Style',
       discount: 31,
       isNew: true
+    },
+    // Adding some Electronics for demo
+    {
+      id: '10',
+      name: 'Wireless Bluetooth Headphones',
+      price: 1999,
+      originalPrice: 2999,
+      moq: 10,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.5,
+      supplier: 'Tech Solutions',
+      discount: 33,
+      isNew: true
+    },
+    {
+      id: '11',
+      name: 'Smart Phone Charger',
+      price: 499,
+      originalPrice: 799,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.0,
+      supplier: 'Tech Solutions',
+      discount: 38,
+      isNew: false
     }
   ].filter(product => product.category === category);
 
@@ -142,11 +170,57 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
               </select>
             </div>
 
-            <button className="flex items-center space-x-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
+            <button 
+              onClick={() => setShowFilter(!showFilter)}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
+            >
               <FiFilter className="text-lg" />
               <span className="font-medium">Filter</span>
             </button>
           </div>
+
+          {/* Filter Panel */}
+          {showFilter && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <h3 className="font-semibold text-gray-800 mb-3">Filters</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">Price Range</label>
+                  <div className="flex space-x-2">
+                    <select className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                      <option>All Prices</option>
+                      <option>Under ₹500</option>
+                      <option>₹500 - ₹1000</option>
+                      <option>₹1000 - ₹2000</option>
+                      <option>Above ₹2000</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">Rating</label>
+                  <div className="flex space-x-2">
+                    <select className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                      <option>All Ratings</option>
+                      <option>4.0+ Stars</option>
+                      <option>3.5+ Stars</option>
+                      <option>3.0+ Stars</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex space-x-2 pt-2">
+                  <button className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300">
+                    Clear All
+                  </button>
+                  <button 
+                    onClick={() => setShowFilter(false)}
+                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    Apply Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -72,7 +72,7 @@ const CartScreen: React.FC<CartScreenProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-28">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="flex items-center justify-between px-4 py-4">
@@ -147,7 +147,7 @@ const CartScreen: React.FC<CartScreenProps> = ({
       </div>
 
       {/* Order Summary */}
-      <div className="px-4 py-4">
+      <div className="px-4 pb-4">
         <div className="bg-white rounded-xl shadow-sm p-4">
           <h3 className="font-semibold text-gray-800 mb-4">Order Summary</h3>
           
@@ -189,8 +189,8 @@ const CartScreen: React.FC<CartScreenProps> = ({
         </div>
       </div>
 
-      {/* Bottom Action */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
+      {/* Fixed Bottom Action */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 safe-area-pb">
         <div className="max-w-md mx-auto">
           <button
             onClick={handlePlaceOrder}
