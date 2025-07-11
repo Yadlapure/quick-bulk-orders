@@ -72,7 +72,7 @@ const CartScreen: React.FC<CartScreenProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-28">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="flex items-center justify-between px-4 py-4">
@@ -89,8 +89,8 @@ const CartScreen: React.FC<CartScreenProps> = ({
         </div>
       </div>
 
-      {/* Cart Items */}
-      <div className="px-4 py-4 space-y-4">
+      {/* Cart Items - Flex grow to take available space */}
+      <div className="flex-1 px-4 py-4 space-y-4 overflow-y-auto pb-32">
         {items.map((item) => (
           <div key={item.id} className="bg-white rounded-xl shadow-sm p-4">
             <div className="flex space-x-3">
@@ -144,10 +144,8 @@ const CartScreen: React.FC<CartScreenProps> = ({
             </div>
           </div>
         ))}
-      </div>
 
-      {/* Order Summary */}
-      <div className="px-4 pb-4">
+        {/* Order Summary */}
         <div className="bg-white rounded-xl shadow-sm p-4">
           <h3 className="font-semibold text-gray-800 mb-4">Order Summary</h3>
           
@@ -189,8 +187,8 @@ const CartScreen: React.FC<CartScreenProps> = ({
         </div>
       </div>
 
-      {/* Fixed Bottom Action */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 safe-area-pb">
+      {/* Fixed Bottom Action - Always visible */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
         <div className="max-w-md mx-auto">
           <button
             onClick={handlePlaceOrder}

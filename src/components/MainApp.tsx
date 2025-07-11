@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { FiHome, FiShoppingBag, FiUser, FiShoppingCart } from 'react-icons/fi';
+import { useToast } from "@/hooks/use-toast";
 import HomeScreen from './HomeScreen';
 import OrdersScreen from './OrdersScreen';
 import ProfileScreen from './ProfileScreen';
@@ -29,6 +29,7 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const { toast } = useToast();
 
   const addToCart = (product: any, quantity: number) => {
     const existingItem = cartItems.find(item => item.id === product.id);
@@ -39,6 +40,10 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
           ? { ...item, quantity: item.quantity + quantity }
           : item
       ));
+      toast({
+        title: "Item Updated",
+        description: `${product.name} quantity updated in cart`,
+      });
     } else {
       setCartItems([...cartItems, {
         id: product.id,
@@ -49,7 +54,12 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
         image: product.image,
         category: product.category
       }]);
+      toast({
+        title: "Added to Cart",
+        description: `${quantity} ${product.name} added to your cart`,
+      });
     }
+    console.log(`Added ${quantity} ${product.name} to cart`);
   };
 
   const removeFromCart = (productId: string) => {

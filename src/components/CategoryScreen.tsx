@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FiArrowLeft, FiFilter, FiGrid, FiList } from 'react-icons/fi';
 
 interface CategoryScreenProps {
@@ -12,9 +12,11 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
   const [showFilter, setShowFilter] = useState(false);
+  const [priceFilter, setPriceFilter] = useState('all');
+  const [ratingFilter, setRatingFilter] = useState('all');
 
   // Mock products filtered by category
-  const mockCategoryProducts = [
+  const allCategoryProducts = [
     {
       id: '1',
       name: 'Premium Cotton T-Shirts',
@@ -67,7 +69,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       discount: 31,
       isNew: true
     },
-    // Adding some Electronics for demo
+    // Electronics
     {
       id: '10',
       name: 'Wireless Bluetooth Headphones',
@@ -93,25 +95,81 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       supplier: 'Tech Solutions',
       discount: 38,
       isNew: false
+    },
+    // Groceries
+    {
+      id: '12',
+      name: 'Organic Basmati Rice',
+      price: 150,
+      originalPrice: 200,
+      moq: 100,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Groceries',
+      rating: 4.6,
+      supplier: 'Fresh Farms',
+      discount: 25,
+      isNew: false
     }
   ].filter(product => product.category === category);
 
-  const sortProducts = (products: any[], sortType: string) => {
-    switch (sortType) {
-      case 'price-low':
-        return [...products].sort((a, b) => a.price - b.price);
-      case 'price-high':
-        return [...products].sort((a, b) => b.price - a.price);
-      case 'rating':
-        return [...products].sort((a, b) => b.rating - a.rating);
-      case 'discount':
-        return [...products].sort((a, b) => b.discount - a.discount);
-      default:
-        return products;
-    }
-  };
+  // Apply filters using useMemo for performance
+  const filteredAndSortedProducts = useMemo(() => {
+    let filtered = [...allCategoryProducts];
 
-  const sortedProducts = sortProducts(mockCategoryProducts, sortBy);
+    // Apply price filter
+    if (priceFilter !== 'all') {
+      filtered = filtered.filter(product => {
+        switch (priceFilter) {
+          case 'under-500':
+            return product.price < 500;
+          case '500-1000':
+            return product.price >= 500 && product.price <= 1000;
+          case '1000-2000':
+            return product.price >= 1000 && product.price <= 2000;
+          case 'above-2000':
+            return product.price > 2000;
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Apply rating filter
+    if (ratingFilter !== 'all') {
+      filtered = filtered.filter(product => {
+        switch (ratingFilter) {
+          case '4+':
+            return product.rating >= 4.0;
+          case '3.5+':
+            return product.rating >= 3.5;
+          case '3+':
+            return product.rating >= 3.0;
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'price-low':
+        return filtered.sort((a, b) => a.price - b.price);
+      case 'price-high':
+        return filtered.sort((a, b) => b.price - a.price);
+      case 'rating':
+        return filtered.sort((a, b) => b.rating - a.rating);
+      case 'discount':
+        return filtered.sort((a, b) => b.discount - a.discount);
+      default:
+        return filtered;
+    }
+  }, [allCategoryProducts, priceFilter, ratingFilter, sortBy]);
+
+  const clearFilters = () => {
+    setPriceFilter('all');
+    setRatingFilter('all');
+    setSortBy('popular');
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -128,7 +186,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-gray-800">{category}</h1>
-                <p className="text-sm text-gray-500">{sortedProducts.length} products available</p>
+                <p className="text-sm text-gray-500">{filteredAndSortedProducts.length} products available</p>
               </div>
             </div>
           </div>
@@ -186,29 +244,36 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
               <div className="space-y-3">
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 block">Price Range</label>
-                  <div className="flex space-x-2">
-                    <select className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                      <option>All Prices</option>
-                      <option>Under ₹500</option>
-                      <option>₹500 - ₹1000</option>
-                      <option>₹1000 - ₹2000</option>
-                      <option>Above ₹2000</option>
-                    </select>
-                  </div>
+                  <select 
+                    value={priceFilter}
+                    onChange={(e) => setPriceFilter(e.target.value)}
+                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  >
+                    <option value="all">All Prices</option>
+                    <option value="under-500">Under ₹500</option>
+                    <option value="500-1000">₹500 - ₹1000</option>
+                    <option value="1000-2000">₹1000 - ₹2000</option>
+                    <option value="above-2000">Above ₹2000</option>
+                  </select>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 block">Rating</label>
-                  <div className="flex space-x-2">
-                    <select className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                      <option>All Ratings</option>
-                      <option>4.0+ Stars</option>
-                      <option>3.5+ Stars</option>
-                      <option>3.0+ Stars</option>
-                    </select>
-                  </div>
+                  <select 
+                    value={ratingFilter}
+                    onChange={(e) => setRatingFilter(e.target.value)}
+                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  >
+                    <option value="all">All Ratings</option>
+                    <option value="4+">4.0+ Stars</option>
+                    <option value="3.5+">3.5+ Stars</option>
+                    <option value="3+">3.0+ Stars</option>
+                  </select>
                 </div>
                 <div className="flex space-x-2 pt-2">
-                  <button className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300">
+                  <button 
+                    onClick={clearFilters}
+                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
+                  >
                     Clear All
                   </button>
                   <button 
@@ -228,7 +293,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       <div className="px-4 py-6">
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-2 gap-4">
-            {sortedProducts.map((product) => (
+            {filteredAndSortedProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => onNavigateToProduct(product)}
@@ -270,7 +335,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
           </div>
         ) : (
           <div className="space-y-3">
-            {sortedProducts.map((product) => (
+            {filteredAndSortedProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => onNavigateToProduct(product)}
@@ -312,7 +377,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
           </div>
         )}
 
-        {sortedProducts.length === 0 && (
+        {filteredAndSortedProducts.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">No products found</h3>
