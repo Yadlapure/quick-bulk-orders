@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FiArrowLeft, FiHeart, FiShare2, FiMinus, FiPlus, FiShoppingCart, FiMessageCircle } from 'react-icons/fi';
 
@@ -12,10 +11,12 @@ const ProductScreen: React.FC<ProductScreenProps> = ({ product, onAddToCart, onB
   const [quantity, setQuantity] = useState(product?.moq || 1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [selectedUnit, setSelectedUnit] = useState('kg'); // For groceries
 
   if (!product) return null;
 
   const images = [product.image, product.image, product.image]; // Mock multiple images
+  const isGrocery = product.category === 'Groceries';
   const totalPrice = product.price * quantity;
   const savings = (product.originalPrice - product.price) * quantity;
 
@@ -26,13 +27,16 @@ const ProductScreen: React.FC<ProductScreenProps> = ({ product, onAddToCart, onB
   };
 
   const handleAddToCart = () => {
-    onAddToCart(product, quantity);
-    // Show toast or feedback
-    console.log(`Added ${quantity} ${product.name} to cart`);
+    const productToAdd = isGrocery 
+      ? { ...product, selectedUnit, name: `${product.name} (${selectedUnit})` }
+      : product;
+    onAddToCart(productToAdd, quantity);
+    // Show feedback
+    console.log(`Added ${quantity} ${productToAdd.name} to cart`);
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pb-24">
       {/* Header */}
       <div className="sticky top-0 bg-white border-b border-gray-100 z-40">
         <div className="flex items-center justify-between px-4 py-4">
@@ -102,8 +106,32 @@ const ProductScreen: React.FC<ProductScreenProps> = ({ product, onAddToCart, onB
             <span className="text-lg text-gray-500 line-through">₹{product.originalPrice}</span>
             <span className="text-green-600 font-semibold">({product.discount}% off)</span>
           </div>
-          <p className="text-sm text-gray-600">Per piece • Minimum Order: {product.moq} pieces</p>
+          <p className="text-sm text-gray-600">
+            Per {isGrocery ? selectedUnit : 'piece'} • Minimum Order: {product.moq} {isGrocery ? selectedUnit : 'pieces'}
+          </p>
         </div>
+
+        {/* Unit Selector for Groceries */}
+        {isGrocery && (
+          <div className="mb-4">
+            <h3 className="font-semibold text-gray-800 mb-3">Unit</h3>
+            <div className="flex space-x-2">
+              {['gram', 'kg'].map((unit) => (
+                <button
+                  key={unit}
+                  onClick={() => setSelectedUnit(unit)}
+                  className={`px-4 py-2 rounded-lg border-2 font-medium ${
+                    selectedUnit === unit
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  {unit}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Quantity Selector */}
         <div className="mb-6">
@@ -137,6 +165,17 @@ const ProductScreen: React.FC<ProductScreenProps> = ({ product, onAddToCart, onB
               <p className="text-sm text-green-600">Save ₹{savings.toLocaleString()}</p>
             </div>
           </div>
+        </div>
+
+        {/* Add to Cart Button - Visible inline */}
+        <div className="mb-6">
+          <button
+            onClick={handleAddToCart}
+            className="w-full bg-blue-600 text-white rounded-xl py-4 px-6 font-semibold flex items-center justify-center space-x-2 hover:bg-blue-700 transition-colors"
+          >
+            <FiShoppingCart className="text-lg" />
+            <span>Add to Cart</span>
+          </button>
         </div>
 
         {/* Features/Benefits */}
@@ -176,23 +215,6 @@ const ProductScreen: React.FC<ProductScreenProps> = ({ product, onAddToCart, onB
               {showFullDescription ? 'Show Less' : 'Read More'}
             </button>
           </div>
-        </div>
-      </div>
-
-      {/* Bottom Actions */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50">
-        <div className="flex space-x-3 max-w-md mx-auto">
-          <button className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
-            <FiMessageCircle className="text-xl text-gray-600" />
-          </button>
-          
-          <button
-            onClick={handleAddToCart}
-            className="flex-1 bg-blue-600 text-white rounded-xl py-3 px-6 font-semibold flex items-center justify-center space-x-2 hover:bg-blue-700 transition-colors"
-          >
-            <FiShoppingCart className="text-lg" />
-            <span>Add to Cart</span>
-          </button>
         </div>
       </div>
     </div>

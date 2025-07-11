@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { FiSearch, FiFilter, FiBell, FiGrid, FiList } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiGrid, FiList, FiBell } from 'react-icons/fi';
 
 interface HomeScreenProps {
   onNavigateToProduct: (product: any) => void;
@@ -13,14 +12,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const categories = [
-    { name: 'All', icon: '🏪' },
-    { name: 'Electronics', icon: '📱' },
-    { name: 'Fashion', icon: '👕' },
-    { name: 'Home & Kitchen', icon: '🏠' },
-    { name: 'Beauty', icon: '💄' },
-    { name: 'Sports', icon: '⚽' },
-    { name: 'Books', icon: '📚' },
-    { name: 'Toys', icon: '🧸' }
+    { name: 'All', icon: '📦', color: 'bg-blue-100' },
+    { name: 'Electronics', icon: '📱', color: 'bg-purple-100' },
+    { name: 'Fashion', icon: '👕', color: 'bg-pink-100' },
+    { name: 'Home & Kitchen', icon: '🏠', color: 'bg-green-100' },
+    { name: 'Groceries', icon: '🥕', color: 'bg-orange-100' },
+    { name: 'Beauty', icon: '💄', color: 'bg-red-100' },
+    { name: 'Sports', icon: '⚽', color: 'bg-yellow-100' },
   ];
 
   const mockProducts = [
@@ -95,6 +93,54 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
       rating: 4.0,
       supplier: 'Beauty Plus',
       discount: 33
+    },
+    {
+      id: 'grocery-1',
+      name: 'Basmati Rice Premium',
+      supplier: 'Rice Mills Co.',
+      price: 120,
+      originalPrice: 150,
+      discount: 20,
+      moq: 5,
+      rating: 4.6,
+      image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300',
+      category: 'Groceries'
+    },
+    {
+      id: 'grocery-2',
+      name: 'Organic Wheat Flour',
+      supplier: 'Organic Foods Ltd.',
+      price: 45,
+      originalPrice: 55,
+      discount: 18,
+      moq: 10,
+      rating: 4.4,
+      image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300',
+      category: 'Groceries'
+    },
+    {
+      id: 'grocery-3',
+      name: 'Fresh Onions',
+      supplier: 'Farm Fresh Vegetables',
+      price: 25,
+      originalPrice: 30,
+      discount: 17,
+      moq: 20,
+      rating: 4.2,
+      image: 'https://images.unsplash.com/photo-1508747703725-719777637510?w=300',
+      category: 'Groceries'
+    },
+    {
+      id: 'grocery-4',
+      name: 'Cooking Oil - Sunflower',
+      supplier: 'Oil Industries',
+      price: 180,
+      originalPrice: 220,
+      discount: 18,
+      moq: 6,
+      rating: 4.5,
+      image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300',
+      category: 'Groceries'
     }
   ];
 
