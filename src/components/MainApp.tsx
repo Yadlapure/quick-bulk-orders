@@ -8,8 +8,20 @@ import CartScreen from './CartScreen';
 import ProductScreen from './ProductScreen';
 import CategoryScreen from './CategoryScreen';
 
+interface AddressData {
+  name: string;
+  phone: string;
+  pincode: string;
+  city: string;
+  state: string;
+  street: string;
+  landmark?: string;
+  addressType: 'home' | 'office' | 'other';
+}
+
 interface MainAppProps {
   onLogout: () => void;
+  userAddress?: AddressData | null;
 }
 
 export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category';
@@ -24,7 +36,7 @@ export interface CartItem {
   category: string;
 }
 
-const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
+const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -98,6 +110,7 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
           <HomeScreen
             onNavigateToProduct={navigateToProduct}
             onNavigateToCategory={navigateToCategory}
+            userAddress={userAddress}
           />
         );
       case 'orders':
@@ -130,7 +143,7 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout }) => {
           />
         );
       default:
-        return <HomeScreen onNavigateToProduct={navigateToProduct} onNavigateToCategory={navigateToCategory} />;
+        return <HomeScreen onNavigateToProduct={navigateToProduct} onNavigateToCategory={navigateToCategory} userAddress={userAddress} />;
     }
   };
 

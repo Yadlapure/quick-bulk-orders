@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
-import { FiSearch, FiFilter, FiGrid, FiList, FiBell } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiGrid, FiList, FiBell, FiMapPin } from 'react-icons/fi';
+
+interface AddressData {
+  name: string;
+  phone: string;
+  pincode: string;
+  city: string;
+  state: string;
+  street: string;
+  landmark?: string;
+  addressType: 'home' | 'office' | 'other';
+}
 
 interface HomeScreenProps {
   onNavigateToProduct: (product: any) => void;
   onNavigateToCategory: (category: string) => void;
+  userAddress?: AddressData | null;
 }
 
-const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigateToCategory }) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigateToCategory, userAddress }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -158,9 +170,26 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
       <div className="bg-white shadow-sm sticky top-0 z-40">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between mb-4">
-            <div>
+            <div className="flex-1">
               <h1 className="text-xl font-bold text-gray-800">TradeHub</h1>
               <p className="text-sm text-gray-600">Welcome, +91 {userPhone}</p>
+              
+              {/* Address Display */}
+              {userAddress ? (
+                <div className="flex items-center space-x-1 mt-1">
+                  <FiMapPin className="text-sm text-gray-500" />
+                  <span className="text-xs text-gray-600 truncate">
+                    Deliver to {userAddress.name} - {userAddress.city}, {userAddress.pincode}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-1 mt-1">
+                  <FiMapPin className="text-sm text-orange-500" />
+                  <span className="text-xs text-orange-600">
+                    Add delivery address
+                  </span>
+                </div>
+              )}
             </div>
             <button className="p-2 rounded-full hover:bg-gray-100 relative">
               <FiBell className="text-xl text-gray-600" />
