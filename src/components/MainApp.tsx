@@ -7,6 +7,7 @@ import ProfileScreen from './ProfileScreen';
 import CartScreen from './CartScreen';
 import ProductScreen from './ProductScreen';
 import CategoryScreen from './CategoryScreen';
+import AddressManagementScreen from './AddressManagementScreen';
 
 interface AddressData {
   name: string;
@@ -24,7 +25,7 @@ interface MainAppProps {
   userAddress?: AddressData | null;
 }
 
-export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category';
+export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category' | 'address-management';
 
 export interface CartItem {
   id: string;
@@ -101,6 +102,15 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
     setCurrentScreen('category');
   };
 
+  const navigateToAddressManagement = () => {
+    setCurrentScreen('address-management');
+  };
+
+  const handleAddressUpdate = (addresses: any[]) => {
+    // Update parent component if needed
+    console.log('Addresses updated:', addresses);
+  };
+
   const totalCartItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const renderScreen = () => {
@@ -116,7 +126,7 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
       case 'orders':
         return <OrdersScreen />;
       case 'profile':
-        return <ProfileScreen onLogout={onLogout} />;
+        return <ProfileScreen onLogout={onLogout} onManageAddresses={navigateToAddressManagement} />;
       case 'cart':
         return (
           <CartScreen
@@ -140,6 +150,13 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
             category={selectedCategory}
             onNavigateToProduct={navigateToProduct}
             onBack={() => setCurrentScreen('home')}
+          />
+        );
+      case 'address-management':
+        return (
+          <AddressManagementScreen
+            onBack={() => setCurrentScreen('profile')}
+            onAddressUpdate={handleAddressUpdate}
           />
         );
       default:

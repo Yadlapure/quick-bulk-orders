@@ -4,9 +4,10 @@ import { FiUser, FiPhone, FiMapPin, FiSettings, FiHelpCircle, FiLogOut, FiChevro
 
 interface ProfileScreenProps {
   onLogout: () => void;
+  onManageAddresses: () => void;
 }
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
+const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onManageAddresses }) => {
   const userPhone = localStorage.getItem('userPhone') || '';
 
   const handleLogout = () => {
@@ -26,7 +27,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout }) => {
       icon: FiMapPin,
       title: 'Manage Addresses',
       subtitle: 'Add or edit delivery addresses',
-      action: () => console.log('Manage Addresses')
+      action: onManageAddresses
     },
     {
       icon: FiCreditCard,
