@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
 import { FiSearch, FiFilter, FiGrid, FiList, FiBell, FiMapPin } from 'react-icons/fi';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface AddressData {
   name: string;
@@ -22,6 +30,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const categories = [
     { name: 'All', icon: '📦', color: 'bg-blue-100' },
@@ -162,6 +172,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
     return matchesSearch && matchesCategory;
   });
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
+
   const userPhone = localStorage.getItem('userPhone') || '';
 
   return (
@@ -263,12 +284,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
           <h2 className="text-lg font-semibold text-gray-800">
             {selectedCategory === 'All' ? 'All Products' : selectedCategory}
           </h2>
-          <span className="text-sm text-gray-500">{filteredProducts.length} items</span>
+          <span className="text-sm text-gray-500">
+            Showing {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length} items
+          </span>
         </div>
 
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-2 gap-4">
-            {filteredProducts.map((product) => (
+            {currentProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => onNavigateToProduct(product)}
@@ -304,7 +327,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
           </div>
         ) : (
           <div className="space-y-3">
-            {filteredProducts.map((product) => (
+            {currentProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => onNavigateToProduct(product)}
@@ -338,6 +361,52 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) setCurrentPage(currentPage - 1);
+                    }}
+                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      href="#"
+                      isActive={currentPage === page}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(page);
+                      }}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                    }}
+                    className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
       </div>

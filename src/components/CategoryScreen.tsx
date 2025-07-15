@@ -1,6 +1,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { FiArrowLeft, FiFilter, FiGrid, FiList } from 'react-icons/fi';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 interface CategoryScreenProps {
   category: string;
@@ -14,6 +22,8 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
   const [showFilter, setShowFilter] = useState(false);
   const [priceFilter, setPriceFilter] = useState('all');
   const [ratingFilter, setRatingFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock products filtered by category
   const allCategoryProducts = [
@@ -165,6 +175,17 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
     }
   }, [allCategoryProducts, priceFilter, ratingFilter, sortBy]);
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredAndSortedProducts.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [priceFilter, ratingFilter, sortBy]);
+
   const clearFilters = () => {
     setPriceFilter('all');
     setRatingFilter('all');
@@ -186,7 +207,9 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-gray-800">{category}</h1>
-                <p className="text-sm text-gray-500">{filteredAndSortedProducts.length} products available</p>
+                <p className="text-sm text-gray-500">
+                  Showing {startIndex + 1}-{Math.min(endIndex, filteredAndSortedProducts.length)} of {filteredAndSortedProducts.length} products
+                </p>
               </div>
             </div>
           </div>
@@ -293,7 +316,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       <div className="px-4 py-6">
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-2 gap-4">
-            {filteredAndSortedProducts.map((product) => (
+            {currentProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => onNavigateToProduct(product)}
@@ -335,7 +358,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
           </div>
         ) : (
           <div className="space-y-3">
-            {filteredAndSortedProducts.map((product) => (
+            {currentProducts.map((product) => (
               <div
                 key={product.id}
                 onClick={() => onNavigateToProduct(product)}
@@ -374,6 +397,52 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) setCurrentPage(currentPage - 1);
+                    }}
+                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+                
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      href="#"
+                      isActive={currentPage === page}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(page);
+                      }}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                    }}
+                    className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
 
