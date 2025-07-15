@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { FiSearch, FiFilter, FiGrid, FiList, FiBell, FiMapPin } from 'react-icons/fi';
 import {
@@ -279,7 +280,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
       </div>
 
       {/* Products */}
-      <div className="px-4 py-6">
+      <div className="px-4 py-6 pb-32">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-800">
             {selectedCategory === 'All' ? 'All Products' : selectedCategory}
