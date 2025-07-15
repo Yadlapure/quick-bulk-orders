@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { FiSearch, FiFilter, FiGrid, FiList, FiBell, FiMapPin } from 'react-icons/fi';
 import {
@@ -164,6 +163,198 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
       rating: 4.5,
       image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300',
       category: 'Groceries'
+    },
+    {
+      id: '7',
+      name: 'Smart Phone Cases',
+      price: 199,
+      originalPrice: 299,
+      moq: 50,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.1,
+      supplier: 'Tech Accessories',
+      discount: 33
+    },
+    {
+      id: '8',
+      name: 'Designer Sunglasses',
+      price: 899,
+      originalPrice: 1299,
+      moq: 15,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.3,
+      supplier: 'Style Co.',
+      discount: 31
+    },
+    {
+      id: '9',
+      name: 'Ceramic Dinner Set',
+      price: 1299,
+      originalPrice: 1799,
+      moq: 10,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Home & Kitchen',
+      rating: 4.6,
+      supplier: 'Home Decor Plus',
+      discount: 28
+    },
+    {
+      id: '10',
+      name: 'Protein Powder',
+      price: 1999,
+      originalPrice: 2499,
+      moq: 5,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Sports',
+      rating: 4.4,
+      supplier: 'Fitness World',
+      discount: 20
+    },
+    {
+      id: '11',
+      name: 'Moisturizing Cream',
+      price: 599,
+      originalPrice: 799,
+      moq: 25,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Beauty',
+      rating: 4.2,
+      supplier: 'Skin Care Co.',
+      discount: 25
+    },
+    {
+      id: '12',
+      name: 'Gaming Mouse',
+      price: 1499,
+      originalPrice: 1999,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.7,
+      supplier: 'Gaming Tech',
+      discount: 25
+    },
+    {
+      id: '13',
+      name: 'Casual Jeans',
+      price: 799,
+      originalPrice: 1199,
+      moq: 30,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.0,
+      supplier: 'Denim World',
+      discount: 33
+    },
+    {
+      id: '14',
+      name: 'Air Fryer',
+      price: 3999,
+      originalPrice: 5999,
+      moq: 5,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Home & Kitchen',
+      rating: 4.5,
+      supplier: 'Kitchen Appliances',
+      discount: 33
+    },
+    {
+      id: '15',
+      name: 'Yoga Mat',
+      price: 999,
+      originalPrice: 1499,
+      moq: 25,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Sports',
+      rating: 4.3,
+      supplier: 'Fitness Equipment',
+      discount: 33
+    },
+    {
+      id: '16',
+      name: 'Hair Serum',
+      price: 399,
+      originalPrice: 599,
+      moq: 50,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Beauty',
+      rating: 4.1,
+      supplier: 'Hair Care Plus',
+      discount: 33
+    },
+    {
+      id: '17',
+      name: 'Bluetooth Speaker',
+      price: 2499,
+      originalPrice: 3499,
+      moq: 10,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.6,
+      supplier: 'Audio Tech',
+      discount: 29
+    },
+    {
+      id: '18',
+      name: 'Running Shoes',
+      price: 2999,
+      originalPrice: 4499,
+      moq: 15,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.4,
+      supplier: 'Footwear Co.',
+      discount: 33
+    },
+    {
+      id: 'grocery-5',
+      name: 'Green Tea Bags',
+      supplier: 'Tea Garden',
+      price: 299,
+      originalPrice: 399,
+      discount: 25,
+      moq: 20,
+      rating: 4.3,
+      image: 'https://images.unsplash.com/photo-1594631661960-e2c1dc7a3b18?w=300',
+      category: 'Groceries'
+    },
+    {
+      id: 'grocery-6',
+      name: 'Almonds Premium',
+      supplier: 'Dry Fruits Co.',
+      price: 899,
+      originalPrice: 1199,
+      discount: 25,
+      moq: 10,
+      rating: 4.5,
+      image: 'https://images.unsplash.com/photo-1508062138369-9e6c2b46b7b4?w=300',
+      category: 'Groceries'
+    },
+    {
+      id: '19',
+      name: 'Coffee Maker',
+      price: 4999,
+      originalPrice: 6999,
+      moq: 5,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Home & Kitchen',
+      rating: 4.2,
+      supplier: 'Coffee Solutions',
+      discount: 29
+    },
+    {
+      id: '20',
+      name: 'Basketball',
+      price: 899,
+      originalPrice: 1299,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Sports',
+      rating: 4.1,
+      supplier: 'Sports Equipment',
+      discount: 31
     }
   ];
 

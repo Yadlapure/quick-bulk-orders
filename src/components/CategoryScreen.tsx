@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo } from 'react';
 import { FiArrowLeft, FiFilter, FiGrid, FiList } from 'react-icons/fi';
 import {
@@ -25,8 +26,9 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Mock products filtered by category
+  // Mock products filtered by category - added more products
   const allCategoryProducts = [
+    // Fashion Products
     {
       id: '1',
       name: 'Premium Cotton T-Shirts',
@@ -79,7 +81,111 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       discount: 31,
       isNew: true
     },
-    // Electronics
+    {
+      id: 'fashion-5',
+      name: 'Denim Jackets',
+      price: 1299,
+      originalPrice: 1799,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.5,
+      supplier: 'Denim Co.',
+      discount: 28,
+      isNew: false
+    },
+    {
+      id: 'fashion-6',
+      name: 'Summer Dresses',
+      price: 799,
+      originalPrice: 1199,
+      moq: 35,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.2,
+      supplier: 'Women Fashion',
+      discount: 33,
+      isNew: true
+    },
+    {
+      id: 'fashion-7',
+      name: 'Leather Belts',
+      price: 599,
+      originalPrice: 899,
+      moq: 50,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.0,
+      supplier: 'Leather Works',
+      discount: 33,
+      isNew: false
+    },
+    {
+      id: 'fashion-8',
+      name: 'Sports Shoes',
+      price: 1999,
+      originalPrice: 2999,
+      moq: 15,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.6,
+      supplier: 'Footwear Plus',
+      discount: 33,
+      isNew: true
+    },
+    {
+      id: 'fashion-9',
+      name: 'Casual Sneakers',
+      price: 1299,
+      originalPrice: 1899,
+      moq: 25,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.3,
+      supplier: 'Shoe World',
+      discount: 32,
+      isNew: false
+    },
+    {
+      id: 'fashion-10',
+      name: 'Winter Jackets',
+      price: 1799,
+      originalPrice: 2499,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.4,
+      supplier: 'Winter Wear',
+      discount: 28,
+      isNew: true
+    },
+    {
+      id: 'fashion-11',
+      name: 'Formal Trousers',
+      price: 899,
+      originalPrice: 1299,
+      moq: 30,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.1,
+      supplier: 'Formal Wear Co.',
+      discount: 31,
+      isNew: false
+    },
+    {
+      id: 'fashion-12',
+      name: 'Cotton Kurtas',
+      price: 699,
+      originalPrice: 999,
+      moq: 40,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Fashion',
+      rating: 4.3,
+      supplier: 'Ethnic Wear',
+      discount: 30,
+      isNew: true
+    },
+    // Electronics Products
     {
       id: '10',
       name: 'Wireless Bluetooth Headphones',
@@ -106,7 +212,85 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       discount: 38,
       isNew: false
     },
-    // Groceries
+    {
+      id: 'electronics-3',
+      name: 'Bluetooth Speakers',
+      price: 1499,
+      originalPrice: 2199,
+      moq: 15,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.4,
+      supplier: 'Audio Tech',
+      discount: 32,
+      isNew: true
+    },
+    {
+      id: 'electronics-4',
+      name: 'Wireless Mouse',
+      price: 799,
+      originalPrice: 1199,
+      moq: 25,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.2,
+      supplier: 'Computer Peripherals',
+      discount: 33,
+      isNew: false
+    },
+    {
+      id: 'electronics-5',
+      name: 'USB Cable Set',
+      price: 299,
+      originalPrice: 499,
+      moq: 50,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.1,
+      supplier: 'Cable Co.',
+      discount: 40,
+      isNew: false
+    },
+    {
+      id: 'electronics-6',
+      name: 'Power Bank 10000mAh',
+      price: 999,
+      originalPrice: 1499,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.3,
+      supplier: 'Power Solutions',
+      discount: 33,
+      isNew: true
+    },
+    {
+      id: 'electronics-7',
+      name: 'Gaming Keyboard',
+      price: 1799,
+      originalPrice: 2499,
+      moq: 12,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.6,
+      supplier: 'Gaming Tech',
+      discount: 28,
+      isNew: true
+    },
+    {
+      id: 'electronics-8',
+      name: 'Webcam HD',
+      price: 1299,
+      originalPrice: 1899,
+      moq: 18,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Electronics',
+      rating: 4.2,
+      supplier: 'Video Tech',
+      discount: 32,
+      isNew: false
+    },
+    // Groceries Products
     {
       id: '12',
       name: 'Organic Basmati Rice',
@@ -118,6 +302,111 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
       rating: 4.6,
       supplier: 'Fresh Farms',
       discount: 25,
+      isNew: false
+    },
+    {
+      id: 'grocery-2',
+      name: 'Wheat Flour Premium',
+      price: 80,
+      originalPrice: 120,
+      moq: 50,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Groceries',
+      rating: 4.3,
+      supplier: 'Grain Mills',
+      discount: 33,
+      isNew: false
+    },
+    {
+      id: 'grocery-3',
+      name: 'Cooking Oil Bundle',
+      price: 299,
+      originalPrice: 399,
+      moq: 30,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Groceries',
+      rating: 4.4,
+      supplier: 'Oil Industries',
+      discount: 25,
+      isNew: true
+    },
+    {
+      id: 'grocery-4',
+      name: 'Spices Combo Pack',
+      price: 199,
+      originalPrice: 299,
+      moq: 40,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Groceries',
+      rating: 4.2,
+      supplier: 'Spice World',
+      discount: 33,
+      isNew: false
+    },
+    {
+      id: 'grocery-5',
+      name: 'Pulses Variety Pack',
+      price: 399,
+      originalPrice: 599,
+      moq: 25,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Groceries',
+      rating: 4.5,
+      supplier: 'Pulse Co.',
+      discount: 33,
+      isNew: true
+    },
+    {
+      id: 'grocery-6',
+      name: 'Tea Leaves Premium',
+      price: 249,
+      originalPrice: 349,
+      moq: 60,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Groceries',
+      rating: 4.3,
+      supplier: 'Tea Gardens',
+      discount: 29,
+      isNew: false
+    },
+    // Home & Kitchen Products
+    {
+      id: 'kitchen-1',
+      name: 'Steel Utensil Set',
+      price: 1299,
+      originalPrice: 1899,
+      moq: 15,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Home & Kitchen',
+      rating: 4.4,
+      supplier: 'Kitchen Essentials',
+      discount: 32,
+      isNew: false
+    },
+    {
+      id: 'kitchen-2',
+      name: 'Non-Stick Cookware',
+      price: 1999,
+      originalPrice: 2999,
+      moq: 10,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Home & Kitchen',
+      rating: 4.5,
+      supplier: 'Cook Pro',
+      discount: 33,
+      isNew: true
+    },
+    {
+      id: 'kitchen-3',
+      name: 'Storage Container Set',
+      price: 799,
+      originalPrice: 1199,
+      moq: 20,
+      image: '/placeholder.svg?height=200&width=200',
+      category: 'Home & Kitchen',
+      rating: 4.2,
+      supplier: 'Storage Solutions',
+      discount: 33,
       isNew: false
     }
   ].filter(product => product.category === category);
@@ -459,3 +748,4 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigateToP
 };
 
 export default CategoryScreen;
+
