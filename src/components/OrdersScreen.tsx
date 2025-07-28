@@ -1,9 +1,36 @@
 
 import React, { useState } from 'react';
-import { FiPackage, FiTruck, FiCheck, FiClock, FiEye } from 'react-icons/fi';
+import { FiPackage, FiTruck, FiCheck, FiClock, FiEye, FiX } from 'react-icons/fi';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const OrdersScreen: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active');
+  const [selectedReason, setSelectedReason] = useState('');
+  const [cancellingOrderId, setCancellingOrderId] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const cancelReasons = [
+    'Changed my mind',
+    'Found a better price elsewhere',
+    'Ordered by mistake',
+    'Item taking too long to ship',
+    'Need to change shipping address',
+    'Financial reasons',
+    'Ordered wrong item/size',
+    'Other reason'
+  ];
 
   const mockOrders = [
     {
@@ -69,6 +96,22 @@ const OrdersScreen: React.FC = () => {
   const completedOrders = mockOrders.filter(order => order.status === 'delivered');
 
   const ordersToShow = activeTab === 'active' ? activeOrders : completedOrders;
+
+  const handleCancelOrder = () => {
+    if (!selectedReason || !cancellingOrderId) return;
+    
+    toast({
+      title: "Order Cancelled",
+      description: `Order #${cancellingOrderId} has been cancelled successfully. Refund will be processed within 3-5 business days.`,
+    });
+    
+    setSelectedReason('');
+    setCancellingOrderId(null);
+  };
+
+  const canCancelOrder = (status: string) => {
+    return status === 'processing';
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -216,6 +259,60 @@ const OrdersScreen: React.FC = () => {
                     <button className="flex-1 bg-green-100 text-green-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-green-200 transition-colors">
                       Reorder
                     </button>
+                  )}
+
+                  {canCancelOrder(order.status) && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button 
+                          onClick={() => setCancellingOrderId(order.id)}
+                          className="flex-1 bg-red-100 text-red-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-red-200 transition-colors flex items-center justify-center space-x-2"
+                        >
+                          <FiX className="text-sm" />
+                          <span>Cancel Order</span>
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="w-[90%] max-w-md mx-auto">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Cancel Order #{order.id}</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Please select a reason for cancelling this order. This will help us improve our service.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        
+                        <div className="space-y-2 my-4">
+                          {cancelReasons.map((reason) => (
+                            <label key={reason} className="flex items-center space-x-3 cursor-pointer">
+                              <input
+                                type="radio"
+                                name="cancelReason"
+                                value={reason}
+                                checked={selectedReason === reason}
+                                onChange={(e) => setSelectedReason(e.target.value)}
+                                className="text-blue-600"
+                              />
+                              <span className="text-sm text-gray-700">{reason}</span>
+                            </label>
+                          ))}
+                        </div>
+                        
+                        <AlertDialogFooter>
+                          <AlertDialogCancel onClick={() => {
+                            setSelectedReason('');
+                            setCancellingOrderId(null);
+                          }}>
+                            Keep Order
+                          </AlertDialogCancel>
+                          <AlertDialogAction 
+                            onClick={handleCancelOrder}
+                            disabled={!selectedReason}
+                            className="bg-red-600 hover:bg-red-700 disabled:opacity-50"
+                          >
+                            Cancel Order
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                   
                   <button className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-gray-200 transition-colors">
