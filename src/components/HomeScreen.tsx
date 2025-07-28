@@ -8,6 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import AdBanner from './AdBanner';
 
 interface AddressData {
   name: string;
@@ -482,39 +483,45 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigateToProduct, onNavigate
         </div>
 
         {viewMode === 'grid' ? (
-          <div className="grid grid-cols-2 gap-4">
-            {currentProducts.map((product) => (
-              <div
-                key={product.id}
-                onClick={() => onNavigateToProduct(product)}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden"
-              >
-                <div className="relative">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-32 object-cover"
-                  />
-                  <span className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                    {product.discount}% OFF
-                  </span>
-                </div>
-                <div className="p-3">
-                  <h3 className="font-medium text-gray-800 text-sm line-clamp-2 mb-2">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center space-x-1 mb-2">
-                    <span className="text-lg font-bold text-gray-900">₹{product.price}</span>
-                    <span className="text-xs text-gray-500 line-through">₹{product.originalPrice}</span>
+          <div className="space-y-4">
+            {currentProducts.map((product, index) => (
+              <React.Fragment key={product.id}>
+                {/* Show ad banner after every 2 products */}
+                {index > 0 && index % 2 === 0 && <AdBanner />}
+                
+                <div
+                  onClick={() => onNavigateToProduct(product)}
+                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden"
+                >
+                  <div className="flex">
+                    <div className="relative w-32 h-32 flex-shrink-0">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                        {product.discount}% OFF
+                      </span>
+                    </div>
+                    <div className="p-3 flex-1">
+                      <h3 className="font-medium text-gray-800 text-sm line-clamp-2 mb-2">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center space-x-1 mb-2">
+                        <span className="text-lg font-bold text-gray-900">₹{product.price}</span>
+                        <span className="text-xs text-gray-500 line-through">₹{product.originalPrice}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>MOQ: {product.moq}</span>
+                        <span className="flex items-center">
+                          ⭐ {product.rating}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>MOQ: {product.moq}</span>
-                    <span className="flex items-center">
-                      ⭐ {product.rating}
-                    </span>
-                  </div>
                 </div>
-              </div>
+              </React.Fragment>
             ))}
           </div>
         ) : (
