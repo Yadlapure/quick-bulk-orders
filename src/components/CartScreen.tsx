@@ -8,6 +8,8 @@ interface CartScreenProps {
   onUpdateQuantity: (productId: string, quantity: number) => void;
   onRemoveItem: (productId: string) => void;
   onBack: () => void;
+  onOrderPlaced: (orderDetails: any) => void;
+  userAddress?: any;
 }
 
 const CartScreen: React.FC<CartScreenProps> = ({
@@ -15,6 +17,8 @@ const CartScreen: React.FC<CartScreenProps> = ({
   onUpdateQuantity,
   onRemoveItem,
   onBack,
+  onOrderPlaced,
+  userAddress,
 }) => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
 
@@ -25,13 +29,42 @@ const CartScreen: React.FC<CartScreenProps> = ({
 
   const handlePlaceOrder = () => {
     setShowOrderSummary(true);
+    
+    // Generate order ID
+    const orderId = 'ORD' + Date.now().toString().slice(-8);
+    
+    // Calculate estimated delivery (3-5 days from now)
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + Math.floor(Math.random() * 3) + 3);
+    const estimatedDelivery = deliveryDate.toLocaleDateString('en-IN', { 
+      weekday: 'long', 
+      day: 'numeric', 
+      month: 'long' 
+    });
+
     // Simulate order placement
     setTimeout(() => {
-      alert('Order placed successfully!');
+      const orderDetails = {
+        orderId,
+        items: [...items],
+        subtotal,
+        shipping,
+        tax,
+        total,
+        estimatedDelivery,
+        paymentMethod: 'Cash on Delivery',
+        deliveryAddress: userAddress || {
+          name: 'Default User',
+          phone: '+91 98765 43210',
+          address: 'Default Address',
+          city: 'Your City',
+          state: 'Your State',
+          pincode: '123456'
+        }
+      };
+      
       setShowOrderSummary(false);
-      // Clear cart and navigate
-      items.forEach(item => onRemoveItem(item.id));
-      onBack();
+      onOrderPlaced(orderDetails);
     }, 2000);
   };
 

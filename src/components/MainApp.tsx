@@ -8,6 +8,7 @@ import CartScreen from './CartScreen';
 import ProductScreen from './ProductScreen';
 import CategoryScreen from './CategoryScreen';
 import AddressManagementScreen from './AddressManagementScreen';
+import OrderConfirmationScreen from './OrderConfirmationScreen';
 
 interface AddressData {
   name: string;
@@ -25,7 +26,7 @@ interface MainAppProps {
   userAddress?: AddressData | null;
 }
 
-export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category' | 'address-management';
+export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category' | 'address-management' | 'order-confirmation';
 
 export interface CartItem {
   id: string;
@@ -42,6 +43,7 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [orderDetails, setOrderDetails] = useState<any>(null);
   const { toast } = useToast();
 
   const addToCart = (product: any, quantity: number) => {
@@ -106,6 +108,20 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
     setCurrentScreen('address-management');
   };
 
+  const handleOrderPlaced = (details: any) => {
+    setOrderDetails(details);
+    setCartItems([]); // Clear cart
+    setCurrentScreen('order-confirmation');
+  };
+
+  const handleContinueShopping = () => {
+    setCurrentScreen('home');
+  };
+
+  const handleTrackOrder = () => {
+    setCurrentScreen('orders');
+  };
+
   const handleAddressUpdate = (addresses: any[]) => {
     // Update parent component if needed
     console.log('Addresses updated:', addresses);
@@ -134,6 +150,16 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
             onUpdateQuantity={updateCartQuantity}
             onRemoveItem={removeFromCart}
             onBack={() => setCurrentScreen('home')}
+            onOrderPlaced={handleOrderPlaced}
+            userAddress={userAddress}
+          />
+        );
+      case 'order-confirmation':
+        return (
+          <OrderConfirmationScreen
+            orderDetails={orderDetails}
+            onContinueShopping={handleContinueShopping}
+            onTrackOrder={handleTrackOrder}
           />
         );
       case 'product':
