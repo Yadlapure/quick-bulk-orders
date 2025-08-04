@@ -9,6 +9,7 @@ import ProductScreen from './ProductScreen';
 import CategoryScreen from './CategoryScreen';
 import AddressManagementScreen from './AddressManagementScreen';
 import OrderConfirmationScreen from './OrderConfirmationScreen';
+import HelpSupportScreen from './HelpSupportScreen';
 
 interface AddressData {
   name: string;
@@ -26,7 +27,7 @@ interface MainAppProps {
   userAddress?: AddressData | null;
 }
 
-export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category' | 'address-management' | 'order-confirmation';
+export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category' | 'address-management' | 'order-confirmation' | 'help-support';
 
 export interface CartItem {
   id: string;
@@ -108,6 +109,10 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
     setCurrentScreen('address-management');
   };
 
+  const navigateToHelpSupport = () => {
+    setCurrentScreen('help-support');
+  };
+
   const handleOrderPlaced = (details: any) => {
     setOrderDetails(details);
     setCartItems([]); // Clear cart
@@ -142,7 +147,7 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
       case 'orders':
         return <OrdersScreen />;
       case 'profile':
-        return <ProfileScreen onLogout={onLogout} onManageAddresses={navigateToAddressManagement} />;
+        return <ProfileScreen onLogout={onLogout} onManageAddresses={navigateToAddressManagement} onHelpSupport={navigateToHelpSupport} />;
       case 'cart':
         return (
           <CartScreen
@@ -183,6 +188,12 @@ const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
           <AddressManagementScreen
             onBack={() => setCurrentScreen('profile')}
             onAddressUpdate={handleAddressUpdate}
+          />
+        );
+      case 'help-support':
+        return (
+          <HelpSupportScreen
+            onBack={() => setCurrentScreen('profile')}
           />
         );
       default:

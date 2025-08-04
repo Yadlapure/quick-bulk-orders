@@ -5,9 +5,10 @@ import { FiUser, FiPhone, FiMapPin, FiSettings, FiHelpCircle, FiLogOut, FiChevro
 interface ProfileScreenProps {
   onLogout: () => void;
   onManageAddresses: () => void;
+  onHelpSupport: () => void;
 }
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onManageAddresses }) => {
+const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onManageAddresses, onHelpSupport }) => {
   const userPhone = localStorage.getItem('userPhone') || '';
 
   const handleLogout = () => {
@@ -51,7 +52,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ onLogout, onManageAddress
       icon: FiHelpCircle,
       title: 'Help & Support',
       subtitle: 'Get help and contact support',
-      action: () => console.log('Help')
+      action: onHelpSupport
     }
   ];
 
