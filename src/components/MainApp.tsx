@@ -25,6 +25,7 @@ interface AddressData {
 interface MainAppProps {
   onLogout: () => void;
   userAddress?: AddressData | null;
+  userLocation?: {lat: number; lng: number; address?: string} | null;
 }
 
 export type Screen = 'home' | 'orders' | 'profile' | 'cart' | 'product' | 'category' | 'address-management' | 'order-confirmation' | 'help-support';
@@ -39,7 +40,7 @@ export interface CartItem {
   category: string;
 }
 
-const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress }) => {
+const MainApp: React.FC<MainAppProps> = ({ onLogout, userAddress, userLocation }) => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
